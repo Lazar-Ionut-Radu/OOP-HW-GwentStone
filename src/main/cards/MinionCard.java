@@ -1,21 +1,24 @@
 package main.cards;
+import fileio.CardInput;
+
 import java.util.ArrayList;
 
 public class MinionCard extends AbstractPlaceableCard {
     int attackDamage;
     private boolean isTank;
 
+    public MinionCard(CardInput cardInput) {
+        super(cardInput);
+        this.attackDamage = cardInput.getAttackDamage();
+
+        CardHandler cardHandler = new CardHandler();
+        this.isTank = cardHandler.isCardTank(this.name);
+    }
+
     public MinionCard(MinionCard minionCard) {
         super(minionCard);
         this.attackDamage = minionCard.attackDamage;
         this.isTank = minionCard.isTank;
-    }
-
-    public MinionCard(String name, String description, ArrayList<String> colors, EnumAbility ability, int mana,
-                      int health, int attackDamage, boolean isTank) {
-        super(name, description, colors, ability, mana, health);
-        this.attackDamage = attackDamage;
-        this.isTank = isTank;
     }
 
     public int getAttackDamage() {

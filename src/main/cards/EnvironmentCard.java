@@ -1,16 +1,15 @@
 package main.cards;
 
+import fileio.CardInput;
+
 import java.util.ArrayList;
 
 public class EnvironmentCard extends AbstractCard {
-    public EnvironmentCard() {
+    public EnvironmentCard(CardInput cardInput) {
+        super(cardInput);
     }
 
     public EnvironmentCard(EnvironmentCard environmentCard) {
         super(environmentCard);
-    }
-
-    public EnvironmentCard(String name, String description, ArrayList<String> colors, EnumAbility ability, int mana) {
-        super(name, description, colors, ability, mana);
     }
 }

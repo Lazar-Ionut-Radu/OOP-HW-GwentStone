@@ -1,4 +1,6 @@
 package main.cards;
+import fileio.CardInput;
+
 import java.util.ArrayList;
 
 public abstract class AbstractCard {
@@ -8,7 +10,15 @@ public abstract class AbstractCard {
     EnumAbility ability;
     int mana;
 
-    public AbstractCard() { }
+    public AbstractCard(CardInput cardInput) {
+        this.name = cardInput.getName();
+        this.description = cardInput.getDescription();
+        this.colors = cardInput.getColors();
+        this.mana = cardInput.getMana();
+
+        CardHandler cardHandler = new CardHandler();
+        this.ability = cardHandler.getAbility(this.name);
+    }
 
     public AbstractCard(AbstractCard card) {
         this.name = card.name;
@@ -17,14 +27,6 @@ public abstract class AbstractCard {
         this.colors.addAll(card.colors);
         this.mana = card.mana;
         this.ability = card.ability;
-    }
-
-    public AbstractCard(String name, String description, ArrayList<String> colors, EnumAbility ability, int mana) {
-        this.name = name;
-        this.description = description;
-        this.colors = colors;
-        this.ability = ability;
-        this.mana = mana;
     }
 
     public String getName() {

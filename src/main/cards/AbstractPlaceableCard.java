@@ -1,5 +1,7 @@
 package main.cards;
 
+import fileio.CardInput;
+
 import java.util.ArrayList;
 
 abstract class AbstractPlaceableCard extends AbstractCard {
@@ -7,9 +9,9 @@ abstract class AbstractPlaceableCard extends AbstractCard {
     boolean hasAttacked;
     int health;
 
-    public AbstractPlaceableCard(String name, String description, ArrayList<String> colors, EnumAbility ability,
-                                 int mana) {
-        super(name, description, colors, ability, mana);
+    public AbstractPlaceableCard(CardInput cardInput) {
+        super(cardInput);
+        this.health = cardInput.getHealth();
         this.isFrozen = false;
         this.hasAttacked = false;
     }
@@ -19,14 +21,6 @@ abstract class AbstractPlaceableCard extends AbstractCard {
         this.isFrozen = false;
         this.hasAttacked = false;
         this.health = placeableCard.health;
-    }
-
-    public AbstractPlaceableCard(String name, String description, ArrayList<String> colors, EnumAbility ability,
-                                 int mana, int health) {
-        super(name, description, colors, ability, mana);
-        this.isFrozen = false;
-        this.hasAttacked = false;
-        this.health = health;
     }
 
     public boolean isFrozen() {
