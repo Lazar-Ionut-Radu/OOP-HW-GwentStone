@@ -8,6 +8,7 @@ public class HeroCard extends AbstractPlaceableCard {
 
     public HeroCard(CardInput cardInput) {
         super(cardInput);
+        this.health = 30;
     }
 
     public HeroCard(HeroCard heroCard)

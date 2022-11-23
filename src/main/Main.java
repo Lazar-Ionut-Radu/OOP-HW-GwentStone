@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
 import fileio.Input;
+import main.game.GamesHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public final class Main {
         }
         Files.createDirectories(path);
 
+
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             String filepath = CheckerConstants.OUT_PATH + file.getName();
             File out = new File(filepath);
@@ -55,6 +57,7 @@ public final class Main {
 
         Checker.calculateScore();
     }
+
 
     /**
      * @param filePath1 for input file
@@ -69,7 +72,9 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
-        //TODO add here the entry point to your implementation
+        /* TODO add here the entry point to your implementation */
+        GamesHandler gamesHandler = new GamesHandler(inputData, output);
+        output = gamesHandler.gameLoop();
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);

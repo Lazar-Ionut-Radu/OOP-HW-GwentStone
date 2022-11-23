@@ -1,3 +1,4 @@
+
 {
   "playerOneDecks": {
     "nrCardsInDeck": 7,
@@ -390,6 +391,11 @@
         {
           "command": "placeCard",
           "handIdx": 0
+        },
+        {
+          "command": "getCardAtPosition",
+          "x": 0,
+          "y": 3
         },
         {
           "command": "useEnvironmentCard",

@@ -1,18 +1,41 @@
 package main.cards;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A class that contains useful methods for identifying cards.
+ */
 public final class CardHandler
 {
+    /**
+     * List of all the environment cards.
+     */
     public final ArrayList<String> environmentCardList;
+    /**
+     * List of all the tank minion cards.
+     */
     public final ArrayList<String> tankMinionCardList;
+    /**
+     * List of all the non-tank minion cards.
+     */
     public final ArrayList<String> nonTankMinionCardList;
+    /**
+     * List of all the hero cards.
+     */
     public final ArrayList<String> heroCardList;
+    /**
+     * Hashmap that pairs the name of the card to its ability.
+     */
     public final HashMap<String, EnumAbility> nameToAbilityHashMap;
 
-    public CardHandler()
-    {
+    /**
+     * Constructor that initiates all the lists.
+     */
+    public CardHandler() {
         this.environmentCardList = new ArrayList<>();
         this.environmentCardList.add("Firestorm");
         this.environmentCardList.add("Winterfell");
@@ -46,9 +69,9 @@ public final class CardHandler
         this.nameToAbilityHashMap.put("Miraj", EnumAbility.Skyjack);
         this.nameToAbilityHashMap.put("The Cursed One", EnumAbility.Shapeshift);
         this.nameToAbilityHashMap.put("Disciple", EnumAbility.GodsPlan);
-        /* Enviroment Cards */
+        /* Environment Cards */
         this.nameToAbilityHashMap.put("Firestorm", EnumAbility.FirestormAbility);
-        this.nameToAbilityHashMap.put("Winterfall", EnumAbility.WinterfellAbility);
+        this.nameToAbilityHashMap.put("Winterfell", EnumAbility.WinterfellAbility);
         this.nameToAbilityHashMap.put("Heart Hound", EnumAbility.HeartHoundAbility);
         /* Hero Cards */
         this.nameToAbilityHashMap.put("Lord Royce", EnumAbility.SubZero);
@@ -57,8 +80,12 @@ public final class CardHandler
         this.nameToAbilityHashMap.put("General Kocioraw", EnumAbility.BloodThirst);
     }
 
-    public EnumCardType getCardType(String name)
-    {
+    /**
+     * Returns the type of the card.
+     * @param name The name of the card.
+     * @return The type of the card.
+     */
+    public EnumCardType getCardType(String name) {
         if (this.environmentCardList.contains(name))
             return EnumCardType.Environment;
         if (this.heroCardList.contains(name))
@@ -68,21 +95,57 @@ public final class CardHandler
         return EnumCardType.None;
     }
 
-    public EnumAbility getAbility(String name)
-    {
+    /**
+     * Returns the ability of a card.
+     * @param name The name of the card.
+     * @return The ability of the card.
+     */
+    public EnumAbility getAbility(String name) {
         if (getCardType(name) == EnumCardType.None)
             return null;
         return this.nameToAbilityHashMap.get(name);
     }
 
-    public boolean isCardTank(String name)
-    {
+    /**
+     * Returns a boolean that specifies if a card is a tank.
+     * @param name The name of the card.
+     * @return Return a boolean that specifies if a card is a tank.
+     */
+    public boolean isCardTank(String name) {
         if (getCardType(name) != EnumCardType.Minion)
             return false;
         else {
-            if (this.nonTankMinionCardList.contains(name))
-                return false;
-            return true;
+            return !this.nonTankMinionCardList.contains(name);
         }
+    }
+
+    /**
+     * Returns an object node representation of a card.
+     * @param card A card that will be converted to object node
+     * @param objectMapper Useful
+     * @return An object node
+     */
+    public ObjectNode cardToObjectNode(AbstractCard card, ObjectMapper objectMapper) {
+        ObjectNode cardObjectNode = objectMapper.createObjectNode();
+
+        cardObjectNode.put("mana", card.getMana());
+
+        if (getCardType(card.getName()) == EnumCardType.Minion)
+            cardObjectNode.put("attackDamage", ((MinionCard)card).getAttackDamage());
+        if (getCardType(card.getName()) == EnumCardType.Minion)
+            cardObjectNode.put("health", ((MinionCard)card).getHealth());
+
+        cardObjectNode.put("description", card.getDescription());
+
+        ArrayNode colorsArrayNode = objectMapper.createArrayNode();
+        for (int colorIdx = 0; colorIdx < card.getColors().size(); colorIdx++)
+            colorsArrayNode.add(card.getColors().get(colorIdx));
+        cardObjectNode.set("colors", colorsArrayNode);
+
+        cardObjectNode.put("name", card.getName());
+        if (getCardType(card.getName()) == EnumCardType.Hero)
+            cardObjectNode.put("health", ((HeroCard)card).getHealth());
+
+        return cardObjectNode;
     }
 }

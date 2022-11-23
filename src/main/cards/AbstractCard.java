@@ -1,16 +1,38 @@
 package main.cards;
 import fileio.CardInput;
-
 import java.util.ArrayList;
 
+
+/**
+ * Represent a generic card that can be either an environment, minion or hero card.
+ */
 public abstract class AbstractCard {
-    String name;
-    String description;
-    ArrayList<String> colors;
-    EnumAbility ability;
+    /**
+     * The name of the card.
+     */
+    final String name;
+    /**
+     * The description of the card (basically useless).
+     */
+    final String description;
+    /**
+     * The colors on the design of the card (basically useless).
+     */
+    final ArrayList<String> colors;
+    /**
+     * The ability of the card.
+     */
+    final EnumAbility ability;
+    /**
+     * The mana cost of the mana.
+     */
     int mana;
 
-    public AbstractCard(CardInput cardInput) {
+    /**
+     * Constructor using the input.
+     * @param cardInput The card as given in the input.
+     */
+    public AbstractCard(final CardInput cardInput) {
         this.name = cardInput.getName();
         this.description = cardInput.getDescription();
         this.colors = cardInput.getColors();
@@ -20,7 +42,11 @@ public abstract class AbstractCard {
         this.ability = cardHandler.getAbility(this.name);
     }
 
-    public AbstractCard(AbstractCard card) {
+    /**
+     * Copy constructor.
+     * @param card: Another card.
+     */
+    public AbstractCard(final AbstractCard card) {
         this.name = card.name;
         this.description = card.description;
         this.colors = new ArrayList<>();
@@ -33,39 +59,22 @@ public abstract class AbstractCard {
         return name;
     }
 
-    protected void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    protected void setDescription(String description) {
-        this.description = description;
     }
 
     public ArrayList<String> getColors() {
         return colors;
     }
 
-    protected void setColors(ArrayList<String> colors) {
-        this.colors = colors;
-    }
-
+    /**
+     * @return The mana cost of the card.
+     */
     public int getMana() {
         return mana;
     }
 
-    protected void setMana(int mana) {
-        this.mana = mana;
-    }
-
     public EnumAbility getAbility() {
         return ability;
-    }
-
-    public void setAbility(EnumAbility ability) {
-        this.ability = ability;
     }
 }
