@@ -2,11 +2,8 @@ package main.game;
 
 import fileio.GameInput;
 import main.cards.*;
-
 import java.util.ArrayList;
 import java.util.Random;
-
-import static java.util.Collections.max;
 import static java.util.Collections.shuffle;
 
 public class Game
@@ -23,7 +20,6 @@ public class Game
     private ArrayList<ArrayList<AbstractCard>> board;
     private int playerOneMana;
     private int playerTwoMana;
-
 
     /* Constructor */
     public Game(GameInput gameInput, ArrayList<ArrayList<AbstractCard>> playerOneDecks, ArrayList<ArrayList<AbstractCard>> playerTwoDecks)
@@ -85,16 +81,8 @@ public class Game
         return playerOneDeck;
     }
 
-    public void setPlayerOneDeck(ArrayList<AbstractCard> playerOneDeck) {
-        this.playerOneDeck = playerOneDeck;
-    }
-
     public ArrayList<AbstractCard> getPlayerTwoDeck() {
         return playerTwoDeck;
-    }
-
-    public void setPlayerTwoDeck(ArrayList<AbstractCard> playerTwoDeck) {
-        this.playerTwoDeck = playerTwoDeck;
     }
 
     public HeroCard getPlayerOneHero() {
@@ -121,58 +109,29 @@ public class Game
         return activePlayer;
     }
 
-    public void setActivePlayer(int activePlayer) {
-        this.activePlayer = activePlayer;
-    }
-
-    public int getRoundNumber() {
-        return roundNumber;
-    }
-
-    public void setRoundNumber(int roundNumber) {
-        this.roundNumber = roundNumber;
-    }
-
     public ArrayList<ArrayList<AbstractCard>> getBoard() {
         return board;
-    }
-
-    public void setBoard(ArrayList<ArrayList<AbstractCard>> board) {
-        this.board = board;
     }
 
     public int getPlayerOneMana() {
         return playerOneMana;
     }
 
-    public void setPlayerOneMana(int playerOneMana) {
-        this.playerOneMana = playerOneMana;
-    }
-
     public int getPlayerTwoMana() {
         return playerTwoMana;
-    }
-
-    public void setPlayerTwoMana(int playerTwoMana) {
-        this.playerTwoMana = playerTwoMana;
     }
 
     public ArrayList<AbstractCard> getPlayerOneHand() {
         return playerOneHand;
     }
 
-    public void setPlayerOneHand(ArrayList<AbstractCard> playerOneHand) {
-        this.playerOneHand = playerOneHand;
-    }
-
     public ArrayList<AbstractCard> getPlayerTwoHand() {
         return playerTwoHand;
     }
 
-    public void setPlayerTwoHand(ArrayList<AbstractCard> playerTwoHand) {
-        this.playerTwoHand = playerTwoHand;
-    }
-
+    /**
+     * Changes the turn.
+     */
     /* Methods for playing the game */
     public void changeActivePlayer()
     {
@@ -264,6 +223,11 @@ public class Game
         }
     }
 
+    /**
+     * Places a card on the board.
+     * @param handIdx The index at which the card is placed in the hand.
+     * @return Integer representing error code / 0 if the action was successful.
+     */
     public int placeCard(int handIdx)
     {
         if (this.playerTwoHero.getHealth() <= 0 || this.playerOneHero.getHealth() <= 0)
@@ -329,6 +293,12 @@ public class Game
         }
     }
 
+    /**
+     * Uses the ability of an environment card.
+     * @param handIdx The index at which the environment card is placed in the hand.
+     * @param affectedRow The row which will be affected by the ability.
+     * @return Integer representing error code / 0 if the action was successful.
+     */
     public int useEnvironmentCard(int handIdx, int affectedRow)
     {
         if (this.playerTwoHero.getHealth() <= 0 || this.playerOneHero.getHealth() <= 0)
@@ -430,7 +400,6 @@ public class Game
             this.playerTwoHand.remove(handIdx);
         }
 
-        System.out.println(card.getName());
         return 0;
     }
 
@@ -462,8 +431,15 @@ public class Game
         return false;
     }
 
-    public int cardUseAttack(int xAttacker, int yAttacker, int xAttacked, int yAttacked)
-    {
+    /**
+     * Makes a minion card attack another minion card from the board.
+     * @param xAttacker The row of the attacker card on the board.
+     * @param yAttacker The column of the attacker card on the board.
+     * @param xAttacked The row of the attacked card on the board.
+     * @param yAttacked The column of the attacked card on the board.
+     * @return Integer representing error code / 0 if the action was successful.
+     */
+    public int cardUseAttack(int xAttacker, int yAttacker, int xAttacked, int yAttacked) {
         if (this.playerTwoHero.getHealth() <= 0 || this.playerOneHero.getHealth() <= 0)
             return -100;
 
@@ -496,9 +472,16 @@ public class Game
         return 0;
     }
 
+    /**
+     * Uses the ability of a minion card from the board.
+     * @param xAttacker The row of the attacker card on the board.
+     * @param yAttacker The column of the attacker card on the board.
+     * @param xAttacked The row of the attacked card on the board.
+     * @param yAttacked The collumn of the attacked card on the board.
+     * @return Integer representing error code / 0 if the action was successful.
+     */
     public int cardUsesAbility(int xAttacker, int yAttacker, int xAttacked, int yAttacked)
     {
-
         if (this.playerTwoHero.getHealth() <= 0 || this.playerOneHero.getHealth() <= 0)
             return -100;
 
@@ -521,8 +504,8 @@ public class Game
             otherPlayer = 2;
         else
             otherPlayer = 1;
-        if (attackerName.equals("The Ripper") || attackerName.equals("Miraj") || attackerName.equals("The Cursed One")) {
 
+        if (attackerName.equals("The Ripper") || attackerName.equals("Miraj") || attackerName.equals("The Cursed One")) {
             if (this.activePlayer == 1 && (xAttacked == 2 || xAttacked == 3))
                 return -4;
             if (this.activePlayer == 2 && (xAttacked == 1 || xAttacked == 0))
@@ -558,12 +541,16 @@ public class Game
         ((MinionCard) this.board.get(xAttacker).get(yAttacker)).setHasAttacked(true);
         removeDestroyedCards();
 
-        System.out.println(attackerName);
         return 0;
     }
 
-    public int cardAttacksHero(int xAttacker, int yAttacker)
-    {
+    /**
+     * Makes a card attack a hero.
+     * @param xAttacker The row of the attacker card on the board.
+     * @param yAttacker The collumn of the attacker card on the board.
+     * @return Integer representing error code / 0 if the action was successful.
+     */
+    public int cardAttacksHero(int xAttacker, int yAttacker) {
         if (this.playerTwoHero.getHealth() <= 0 || this.playerOneHero.getHealth() <= 0)
             return -100;
 
@@ -583,7 +570,6 @@ public class Game
 
         ((MinionCard) this.board.get(xAttacker).get(yAttacker)).setHasAttacked(true);
         if (otherPlayer == 1) {
-
             this.playerOneHero.setHealth(this.playerOneHero.getHealth() -  ((MinionCard) this.board.get(xAttacker).get(yAttacker)).getAttackDamage());
             if (this.playerOneHero.getHealth() <= 0)
                 return 2;
@@ -594,12 +580,15 @@ public class Game
                 return 1;
         }
 
-
         return 0;
     }
 
-    public int heroUsesAbility(int affectedRow)
-    {
+    /**
+     * Uses the ability of a hero.
+     * @param affectedRow The row that is affected by the ability.
+     * @return Integer representing error code / 0 if the action was successful.
+     */
+    public int heroUsesAbility(int affectedRow) {
         if (this.playerTwoHero.getHealth() <= 0 || this.playerOneHero.getHealth() <= 0)
             return -100;
 
@@ -610,15 +599,10 @@ public class Game
             hero = this.playerTwoHero;
 
 
-        if (this.activePlayer == 1 && hero.getMana() > this.playerOneMana) {
-            System.out.println(hero.getMana() + " " + this.playerOneMana);
+        if (this.activePlayer == 1 && hero.getMana() > this.playerOneMana)
             return -1;
-
-        }
-        if (this.activePlayer == 2 && hero.getMana() > this.playerTwoMana) {
-            System.out.println(hero.getMana() + " " + this.playerTwoMana);
+        if (this.activePlayer == 2 && hero.getMana() > this.playerTwoMana)
             return -1;
-        }
 
         if (this.activePlayer == 1 && this.playerOneHero.getHasAttacked())
             return -2;
@@ -639,21 +623,17 @@ public class Game
                 return -4;
         }
 
-        if (hero.getName().equals("Lord Royce"))
-        {
+        if (hero.getName().equals("Lord Royce")) {
             int maxDamageMinionIdx = -1;
             int maxDamage = -1;
-            for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++) {
+            for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++)
                 if (maxDamage < ((MinionCard)(this.board.get(affectedRow).get(cardIdx))).getAttackDamage()) {
-                    maxDamage = ((MinionCard)(this.board.get(affectedRow).get(cardIdx))).getAttackDamage();
+                    maxDamage = ((MinionCard) (this.board.get(affectedRow).get(cardIdx))).getAttackDamage();
                     maxDamageMinionIdx = cardIdx;
                 }
-            }
-
             ((MinionCard)this.board.get(affectedRow).get(maxDamageMinionIdx)).freeze();
         }
-        if (hero.getName().equals("Empress Thorina"))
-        {
+        if (hero.getName().equals("Empress Thorina")) {
             int maxHealthMinionIdx = -1;
             int maxHealth = -1;
             for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++) {
@@ -662,21 +642,15 @@ public class Game
                     maxHealthMinionIdx = cardIdx;
                 }
             }
-
             this.board.get(affectedRow).remove(maxHealthMinionIdx);
         }
         if (hero.getName().equals("General Kocioraw"))
-        {
-            for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++) {
+            for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++)
                 ((MinionCard) (this.board.get(affectedRow).get(cardIdx))).setAttackDamage(((MinionCard) (this.board.get(affectedRow).get(cardIdx))).getAttackDamage() + 1);
-            }
-        }
+
         if (hero.getName().equals("King Mudface"))
-        {
-            for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++) {
+            for (int cardIdx = 0; cardIdx < this.board.get(affectedRow).size(); cardIdx++)
                 ((MinionCard) (this.board.get(affectedRow).get(cardIdx))).takeDamage(-1);
-            }
-        }
 
         hero.setHasAttacked(true);
         if (this.activePlayer == 1)
@@ -684,7 +658,6 @@ public class Game
         else
             this.playerTwoMana -= hero.getMana();
 
-        System.out.println(hero.getName());
         return 0;
     }
 }

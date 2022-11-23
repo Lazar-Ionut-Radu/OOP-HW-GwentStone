@@ -42,3 +42,23 @@
 
 
 <div align="center"><img src="https://tenor.com/view/homework-time-gif-24854817.gif" width="500px"></div>
+
+## My implementation
+
+The cards are represented by the following classes: 
+1. *AbstractCard*. A generic card.
+2. *AbstractPlaceableCard*. Extends AbstractCard and represents card that can be placed on the board.
+3. *EnvironmentCard*. Extends AbstractCard.
+4. *MinionCard*. Extends AbstractPlaceableCard and can be of tank or nontank.
+5. *HeroCard*. Extends AbstractPlaceableCard. Represents a player. When a hero dies the game ends.
+
+The *CardHandler* class implements useful method for assigning the correct ability to a card, for checking the types
+of the cards given their name and for checking whether they are tanks.
+
+The *Game* class contains all the information necessary for the implementation of a game. It handles the placing of the
+cards on the board satisfying the constraints on column index and card type, it handles the passing of the turns and 
+rounds, adding mana to the players and adding card to their hand and also implements the use of all the commands 
+requested in the homework.
+
+The *GamesHandler* class contains the games themselves and methods for parsing the input/output. It also contains the 
+deck selections of the players.

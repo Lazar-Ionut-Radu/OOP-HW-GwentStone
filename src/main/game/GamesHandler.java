@@ -12,6 +12,9 @@ import main.cards.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * A class that oversees the games, takes the input and writes the associated output.
+ */
 public class GamesHandler
 {
     private final ArrayList<ArrayList<ActionsInput>> actions;
@@ -21,6 +24,9 @@ public class GamesHandler
     private int numberOfGamesPlayed;
     private int numberOfWinsPlayerOne;
     private int numberOfWinsPlayerTwo;
+    /**
+     * The output of the game(s).
+     */
     ArrayNode output;
 
     /* Constructor */
@@ -76,32 +82,7 @@ public class GamesHandler
         return decks;
     }
 
-    /* Setters and getters */
-    public int getNumberOfGamesPlayed() {
-        return numberOfGamesPlayed;
-    }
-
-    public void setNumberOfGamesPlayed(int numberOfGamesPlayed) {
-        this.numberOfGamesPlayed = numberOfGamesPlayed;
-    }
-
-    public int getNumberOfWinsPlayerOne() {
-        return numberOfWinsPlayerOne;
-    }
-
-    public void setNumberOfWinsPlayerOne(int numberOfWinsPlayerOne) {
-        this.numberOfWinsPlayerOne = numberOfWinsPlayerOne;
-    }
-
-    public int getNumberOfWinsPlayerTwo() {
-        return numberOfWinsPlayerTwo;
-    }
-
-    public void setNumberOfWinsPlayerTwo(int numberOfWinsPlayerTwo) {
-        this.numberOfWinsPlayerTwo = numberOfWinsPlayerTwo;
-    }
-
-    /* Game loop(s) */
+    /* Game loop */
     public ArrayNode gameLoop()
     {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -142,10 +123,8 @@ public class GamesHandler
             case "getTotalGamesPlayed" -> executeGetTotalGamesPlayedAction(objectMapper);
             default -> objectMapper.createObjectNode(); /* Idk how to write an empty one */
         };
-
         if (objectNode != null)
             this.output.add(objectNode);
-
     }
 
     private ObjectNode executeGetDeckAction(ObjectMapper objectMapper, ActionsInput action, Game game)
