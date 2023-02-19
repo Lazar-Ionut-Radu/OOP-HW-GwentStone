@@ -1,6 +1,6 @@
 
 
-# Tema POO  - GwentStone
+# Homework OOP - GwentStone
 
 <div align="center"><img src="https://tenor.com/view/witcher3-gif-9340436.gif" width="500px"></div>
 
